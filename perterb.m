@@ -2,7 +2,7 @@ function [] = perterb(n, t)
 
 clf;
 
-itera = 5000;
+itera = 8000;
 petb = 0.00001;
 
 if nargin == 0   % if the number of inputs equals 0

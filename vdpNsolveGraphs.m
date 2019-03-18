@@ -4,7 +4,7 @@ clf;
 
 if nargin == 0   % if the number of inputs equals 0
     n = 4;
-    t = [0 50000];
+    t = [0 100];
 end
 
 time = 0;
@@ -13,13 +13,14 @@ time = 0;
 
 % a1 = -2;
 % b1 = 2;
-%initialCond = (b1-a1).*rand(2*n,1) + a1; 
+%initialCond = (b1-a1).*rand(2*n,1) + a1;
 
-initialCond = [0;-3.25;0;2.25;0;-2.25;0;3.25];
+initialCond = [2.022;0;2.022;0;-0.70485;1.31125;-0.70485;1.31125];
+%initialCond = [1;1;1;1;1;1;1;1];
 
 %% ODE solver
 
-options = odeset('Events',@myEventsFun);
+options = odeset('RelTol',10^-8,'AbsTol',10^-11,'Events',@myEventsFun);
 [t,y,te,ye,ie] = ode23(@vdpN,t,initialCond, options);
 
 %% Checking order of ie & te has the first oscillator first (NOTE: is it always the first oscillator or does it just make sure they are in order?
@@ -61,7 +62,7 @@ PhDi2 = ((te(2,end)-te(1,end))*360/tp1);
 PhDi3 = ((te(3,end)-te(1,end))*360/tp1);
 PhDi4 = ((te(4,end)-te(1,end))*360/tp1);
 
-phaseDif = [0, PhDi2, PhDi3, PhDi4]%, initialCond']%
+phaseDif = [0, PhDi2, PhDi3, PhDi4]%, initialCond']
 
 
 %% Figures
@@ -88,8 +89,11 @@ for j = 1:2:2*n
     figure(3)
     plot(y(:,j),y(:,j+1),'-o')
     title('Solution of van der Pol Equation (e = 5) with ODE23');
-    xlabel('solution x');
-    ylabel('Xdiff');
+ax = gca;
+ax.XAxisLocation = 'origin';
+ax.YAxisLocation = 'origin';
+%     xlabel('solution x');
+%     ylabel('Xdiff');
     
 end
 

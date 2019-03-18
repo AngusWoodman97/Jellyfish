@@ -31,7 +31,7 @@ time = 0;
                 
  %               initialCondMatrix = [initialCondMatrix; initialCond'];
                 
-                options = odeset('Events',@myEventsFun);
+                options = odeset('RelTol',10^-8,'AbsTol',10^-11,'Events',@myEventsFun);
                 [t,y,te,ye,ie] = ode23(@vdpN,t,initialCond, options);
                 %[t,y] = ode23(@vdpN,t,initialCond);
                 %[t,y] = ode23(@vdpN2,t,initialCond);

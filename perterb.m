@@ -1,9 +1,29 @@
-function [] = perterb(n, t)
+function [ph_list_full_all] = perterb(n,t)
 
 clf;
+tic
 
-itera = 8000;
-petb = 0.00001;
+itera = 100;
+
+petb1 = [0.0001, 0.1];
+% petb = [0, 0, 0, 0, 0, 0, petb1(1), 0;...
+%      0, 0, 0, 0, 0, 0, petb1(2), 0;...
+%      0, 0, 0, 0, 0, 0, 0, petb1(1);...
+%      0, 0, 0, 0, 0, 0, 0, petb1(2)];
+     
+petb = [petb1(1), 0, 0, 0, 0, 0, 0, 0;...
+    petb1(2), 0, 0, 0, 0, 0, 0, 0;...
+    0, petb1(1), 0, 0, 0, 0, 0, 0;...
+    0, petb1(2), 0, 0, 0, 0, 0, 0;...
+    petb1(1), 0, petb1(1), 0, petb1(1), 0, petb1(1), 0;...
+    petb1(2), 0, petb1(2), 0, petb1(2), 0, petb1(2), 0;...
+    0, petb1(1), 0, petb1(1), 0, petb1(1), 0, petb1(1);...
+    0, petb1(2), 0, petb1(2), 0, petb1(2), 0, petb1(2);...
+    petb1(1), petb1(1), 0, 0, 0, 0, 0, 0;...
+    petb1(2), petb1(2), 0, 0, 0, 0, 0, 0;...
+    petb1(1), petb1(1), petb1(1), petb1(1), petb1(1), petb1(1), petb1(1), petb1(1);...
+    petb1(2), petb1(2), petb1(2), petb1(2), petb1(2), petb1(2), petb1(2), petb1(2)];
+
 
 if nargin == 0   % if the number of inputs equals 0
     n = 4;
@@ -12,17 +32,20 @@ end
 
 time = 0;
 
+ph_list_full_all = [];
+
 %% Initial Conditions (random or chosen)
 
 % a1 = -2;
 % b1 = 2;
 %initialCond = (b1-a1).*rand(2*n,1) + a1; 
 
-initialCond = [0;-3.25;0;0.25;0;-0.25;0;3.25];
+initialCond = [0;-2.25;0;0.25;0;0.25;0;0.25];
+
 
 %% ODE solver
 
-options = odeset('Events',@myEventsFun);
+options = odeset('RelTol',10^-8,'AbsTol',10^-11,'Events',@myEventsFun);
 [t,y,te,ye,ie] = ode23(@vdpN,t,initialCond, options);
 
 %% Checking order of ie & te has the first oscillator first (NOTE: is it always the first oscillator or does it just make sure they are in order?
@@ -43,19 +66,6 @@ if mod(length(ie),4) ~= 0
     te = te(mod(length(te),4)+1:end);
 end
 te = reshape(te,4,size(te,1)/4);
-
-%% checking the difference in the time periods of the oscilators
-
-tp1 = te(1,end)-te(1,end-1);
-tp2 = te(2,end)-te(2,end-1);
-tp3 = te(3,end)-te(3,end-1);
-tp4 = te(4,end)-te(4,end-1);
-% if tp1-tp2<0.00001 && tp2-tp3<0.00001 && tp3-tp4<0.00001
-% else
-%     'time periods not the same'
-%  %   format long
-%     TimePeriods = [tp1, tp2, tp3, tp4]
-% end
 
 %% Phase change whole
 
@@ -68,20 +78,22 @@ phd2_list=tp2_list./tp1_list.*360;
 phd3_list=tp3_list./tp1_list.*360;
 phd4_list=tp4_list./tp1_list.*360;
 
-%% Perterb and do agian
+toc
 
-%for i=1:4
+%% Perterb and do agian
+J = y;
+T = t;
+
+for i=1:length(petb)
 
 t = [0 itera];
 
-initialCond = y(end,:) + [petb, 0, 0, 0, 0, 0, 0, 0];
-% initialCond = y(end,:) + [0, petb, 0, 0, 0, 0, 0, 0];
-% initialCond = y(end,:) + [petb, 0, petb, 0, petb, 0, petb, 0];
-% initialCond = y(end,:) + [0, petb, 0, petb, 0, petb, 0, petb];
+initialCond = J(end,:) + petb(i,:);
+
 
 %% ODE solver
 
-options = odeset('Events',@myEventsFun);
+options = odeset('RelTol',10^-8,'AbsTol',10^-11,'Events',@myEventsFun);
 [t,y,te,ye,ie] = ode23(@vdpN,t,initialCond, options);
 
 %% Checking order of ie & te has the first oscillator first (NOTE: is it always the first oscillator or does it just make sure they are in order?
@@ -103,20 +115,6 @@ if mod(length(ie),4) ~= 0
 end
 te = reshape(te,4,size(te,1)/4);
 
-%% checking the difference in the time periods of the oscilators
-
-tp1 = te(1,end)-te(1,end-1);
-tp2 = te(2,end)-te(2,end-1);
-tp3 = te(3,end)-te(3,end-1);
-tp4 = te(4,end)-te(4,end-1);
-
-% if tp1-tp2<0.00001 && tp2-tp3<0.00001 && tp3-tp4<0.00001
-% else
-%     'time periods not the same'
-% %    format long
-%     TimePeriods = [tp1, tp2, tp3, tp4]
-% end
-
 %% Phase change whole Plot
 
 tp1_list=te(1,2:end)-te(1,1:end-1);
@@ -124,14 +122,48 @@ tp2_list=te(2,2:end)-te(1,2:end);
 tp3_list=te(3,2:end)-te(1,2:end);
 tp4_list=te(4,2:end)-te(1,2:end);
 
-phd2_list= [phd2_list, tp2_list./tp1_list.*360];
-phd3_list= [phd3_list, tp3_list./tp1_list.*360];
-phd4_list=[phd4_list, tp4_list./tp1_list.*360];
+phd22_list= [phd2_list, tp2_list./tp1_list.*360];
+phd33_list= [phd3_list, tp3_list./tp1_list.*360];
+phd44_list=[phd4_list, tp4_list./tp1_list.*360];
 
-%ph_list_full = [phd2_list; phd3_list; phd4_list];
-%end
+% NEED TO CHANGE THIS SO IT ACCOUNTS FOR WHEN ph_list_full IS BIGGER THAN ph_list_full_all
+ph_list_full = [phd22_list; phd33_list; phd44_list];
+if length(ph_list_full) ~= length(ph_list_full_all)
+    ph_list_full = [ph_list_full,zeros(3,length(ph_list_full_all)-length(ph_list_full))+1];
+end
+ph_list_full_all = [ph_list_full_all; ph_list_full];
+
+
+%% GRAPHS
+figure
 hold on
-plot(phd2_list,'b')
-plot(phd3_list,'g')
-plot(phd4_list,'r')
+plot(phd22_list,'b')
+plot(phd33_list,'g')
+plot(phd44_list,'r')
+hold off
+
+t2 = [T;t+itera];
+y2 = [J;y];
+
+% % below produces 4 graphs not 1????
+% for j = 1:2:2*n
+%     hold on
+%     figure
+%     plot(t2,y2(:,j),'-o')
+%     title('Solution of van der Pol Equation (e = 5) with ODE23');
+%     xlabel('Time t');
+%     ylabel('Solution x');
+%     
+%     
+% %     hold on
+% %     figure(3)
+% %     plot(y(:,j),y(:,j+1),'-o')
+% %     title('Solution of van der Pol Equation (e = 5) with ODE23');
+% %     xlabel('solution x');
+% %     ylabel('Xdiff');
+%     
+% end
+
+end
+
 end

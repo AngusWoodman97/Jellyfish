@@ -9,29 +9,37 @@ end
 
 phaseDifMatrix = [];
 initialCondMatrix = [0,0,0,0,0,0,0,0];
-%initialCondRepeatMatrix = [];
+initialCondRepeatMatrix = [];
 time = 0;
 
 for j = -2.25:0.5:2.25
     for k = -2.25:0.5:2.25
         for l = -2.25:0.5:2.25
-            for m = -2.25:1:2.25
+            for m = -2.25:0.5:2.25
                 
-                initialCond = [j;0;k;0;l;0;m;0];
-                initialCond2 = [j,0,k,0,l,0,m,0; k,0,l,0,m,0,j,0;...
-                    l,0,m,0,j,0,k,0; m,0,j,0,k,0,l,0; m,0,l,0,k,0,j,0;...
-                    l,0,k,0,j,0,m,0;k,0,j,0,m,0,l,0;j,0,m,0,l,0,k,0];
+                 initialCond = [j;0;k;0;l;0;m;0];
+                 initialCond2 = [j,0,k,0,l,0,m,0; k,0,l,0,m,0,j,0;...
+                      l,0,m,0,j,0,k,0; m,0,j,0,k,0,l,0; m,0,l,0,k,0,j,0;...
+                      l,0,k,0,j,0,m,0;k,0,j,0,m,0,l,0;j,0,m,0,l,0,k,0];
+                 
+%                if sum(ismember(sort(initialCondMatrix,2),sort(initialCond'),'rows'))>0
+%                  initialCondRepeatMatrix = [initialCondRepeatMatrix; initialCond'];
+%                else
                 
-                %if sum(ismember(sort(initialCondMatrix,2),sort(initialCond'),'rows'))>0
-                %   initialCondRepeatMatrix = [initialCondRepeatMatrix; initialCond'];
-                %else
-                
-                initialCondCheck = [];
+                initialCondCheck = zeros(8,1);
                 for i=1:size(initialCond2,1)
-                    initialCondCheck = [initialCondCheck;sum(ismember(initialCondMatrix,initialCond2(i,:),'rows'))];
+                    initialCondCheck(i) = sum(ismember(initialCondMatrix,initialCond2(i,:),'rows'));
                 end
-                if sum(initialCondCheck)>0
-  %                  initialCondRepeatMatrix = [initialCondRepeatMatrix; initialCond'];
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                initialCondRepeatMatrix = [initialCondRepeatMatrix; initialCond'];
                 else
                     initialCondMatrix = [initialCondMatrix; initialCond'];
                     
@@ -51,8 +59,8 @@ for j = -2.25:0.5:2.25
                         end
                     end
                     if mod(length(ie),4) ~= 0
-                        ie = ie(mod(length(ie),4)+1:end);
-                        te = te(mod(length(te),4)+1:end);
+                         ie = ie(1:end-mod(length(ie),4));
+                         te = te(1:end-mod(length(te),4));
                     end
                     te = reshape(te,4,size(te,1)/4);
                     
@@ -81,7 +89,6 @@ for j = -2.25:0.5:2.25
             time = time + 1
         end
     end
-end
 end
 toc
 end

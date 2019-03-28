@@ -1,7 +1,7 @@
 function dydt = vdpN2(t,x)
 
 A = 2;
-B = 0.1;
+B = 0;
 w = 1;
 e = 5;
 n=4;

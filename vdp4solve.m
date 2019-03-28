@@ -28,6 +28,13 @@ ylabel('Solution x');
 legend('x_1','x_2', 'x_3','x_4')
 
 figure(2)
+plot(t,y(:,2),'-o', t,y(:,4),'-o', t,y(:,6),'-o', t,y(:,8),'-o')
+title('Solution of van der Pol Equation (e = 5) with ODE23');
+xlabel('Time t');
+ylabel('Solution x');
+legend('x_1','x_2', 'x_3','x_4')
+
+figure(3)
 plot(y(:,1),y(:,2),'-o', y(:,3),y(:,4),'-o', y(:,5),y(:,6),'-o', y(:,7),y(:,8),'-o')
 title('Solution of van der Pol Equation (e = 5) with ODE23');
 xlabel('solution x');

@@ -1,11 +1,12 @@
 clear all
 %% Loading results
-load('results5.mat')
+load('results6.mat')
+load('Mod2_results3')
 
 InPhaseRes = [];
 OutPhaseRes=[];
 
-A = results5;
+A = results6;
 
 %% Getting the in and out of Phase results 
 for i = 1:size(A, 1)

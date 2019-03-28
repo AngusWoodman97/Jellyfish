@@ -4,6 +4,10 @@ load('df2_results1')
 load('df2_results2')
 load('df2_results3')
 load('df2_results4')
+load('df2_results5')
+load('df2_results6')
+load('df2_results7')
+load('df2_results8')
 
 InPhaseRes = [];
 OutPhaseRes=[];
@@ -15,7 +19,7 @@ Case5 = [];
 Case6_other = [];
 X = [0, 0, 180, 180];
 
-A = [df2_results1];%;df2_results2;df2_results3;df2_results4];
+A = [df2_results8];%;df2_results2;df2_results3;df2_results4];
 
 %% Getting the in and out of Phase results 
 for i = 1:size(A, 1)
@@ -43,69 +47,70 @@ for i=1:size(OutPhaseRes,1)
 end
 
 %% Graph for results1
-Z = sort(Case1(:,6:2:12),2);
-N = sort(InPhaseRes(:,6:2:12),2);
-hold on
-% ax = gca;
-% ax.XAxisLocation = 'origin';
-% ax.YAxisLocation = 'origin';
-plot(Z(:,1),Z(:,3),'*r')
-plot(Z(:,3),Z(:,1),'*r')
-plot(N(:,1),N(:,3),'*b')
-plot(N(:,3),N(:,1),'*b')
-title('Results of 2 pairs of oscilators with initial positions set to 0 and pairs set in same direction of equal magnitude');
-xlabel('Xdot(0) 1st pair');
-ylabel('Xdot(0) 2nd pair');
-
-% %% Graph for results2
-% 
 % Z = sort(Case1(:,6:2:12),2);
-% N = sort(Case2(:,6:2:12),2);
+% N = sort(InPhaseRes(:,6:2:12),2);
 % hold on
-% % ax = gca;
-% % ax.XAxisLocation = 'origin';
-% % ax.YAxisLocation = 'origin';
-% plot(Z(:,3),Z(:,4),'*r')
-% plot(Z(:,4),Z(:,3),'*r')
-% plot(N(:,3),N(:,4),'*b')
-% plot(N(:,4),N(:,3),'*b')
-% title('Results of 2 pairs of oscilators with initial positions set to 0 and pairs set in opposite directions of equal magnitude');
-% xlabel('Xdot(0) 1st pair');
-% ylabel('Xdot(0) 2nd pair');
-
-% %% Graph for results3
-% Z = sort(Case1(:,5:2:12),2);
-% N = sort(InPhaseRes(:,5:2:12),2);
-% hold on
-% % ax = gca;
+% ax = gca;
+% ax.FontSize = 14;
 % % ax.XAxisLocation = 'origin';
 % % ax.YAxisLocation = 'origin';
 % plot(Z(:,1),Z(:,3),'*r')
 % plot(Z(:,3),Z(:,1),'*r')
 % plot(N(:,1),N(:,3),'*b')
 % plot(N(:,3),N(:,1),'*b')
-% title('Results of 2 pairs of oscilators with initial differentials set to 0 and position of pairs of same value and sign');
-% xlabel('X(0) 1st pair');
-% ylabel('X(0) 2nd pair');
+% %title('B=-0.1');
+% xlabel('$\dot{x}(0)_{1,2}$','interpreter','latex');
+% ylabel('$\dot{x}(0)_{3,4}$','interpreter','latex');
 
-% %% Graph for results4
-% 
-% Z = sort(Case1(:,5:2:12),2);
-% N = sort(Case2(:,5:2:12),2);
-% M = sort(Case6_other(:,5:2:12),2);
+%% Graph for results2
+
+% Z = sort(Case1(:,6:2:12),2);
+% N = sort(Case2(:,6:2:12),2);
 % hold on
-% % ax = gca;
+% ax = gca;
+% ax.FontSize = 14;
 % % ax.XAxisLocation = 'origin';
 % % ax.YAxisLocation = 'origin';
 % plot(Z(:,3),Z(:,4),'*r')
 % plot(Z(:,4),Z(:,3),'*r')
-% plot(N(:,3),N(:,4),'*b')
-% plot(N(:,4),N(:,3),'*b')
-% plot(M(:,3),M(:,4),'*g')
-% plot(M(:,4),M(:,3),'*g')
-% title('Results of 2 pairs of oscilators with initial differentials set to 0 and and position of pairs of same value but different sign');
-% xlabel('X(0) 1st pair');
-% ylabel('X(0) 2nd pair');
+% plot(N(:,3),N(:,4),'*g')
+% plot(N(:,4),N(:,3),'*g')
+% xlabel('$\dot{x}(0)_{1} = -\dot{x}(0)_{2}$','interpreter','latex');
+% ylabel('$\dot{x}(0)_{3} = -\dot{x}(0)_{4}$','interpreter','latex');
+
+%% Graph for results3
+% Z = sort(Case1(:,5:2:12),2);
+% N = sort(InPhaseRes(:,5:2:12),2);
+% hold on
+% ax = gca;
+% ax.FontSize = 16;
+% % ax.XAxisLocation = 'origin';
+% % ax.YAxisLocation = 'origin';
+% plot(Z(:,1),Z(:,3),'*r')
+% plot(Z(:,3),Z(:,1),'*r')
+% plot(N(:,1),N(:,3),'*b')
+% plot(N(:,3),N(:,1),'*b')
+% xlabel('$x(0)_{1,2}$','interpreter','latex');
+% ylabel('$x(0)_{3,4}$','interpreter','latex');
+
+%% Graph for results4
+
+Z = sort(Case1(:,5:2:12),2);
+N = sort(Case2(:,5:2:12),2);
+M = sort(Case6_other(:,5:2:12),2);
+hold on
+ax = gca;
+ax.FontSize = 16;
+% ax.XAxisLocation = 'origin';
+% ax.YAxisLocation = 'origin';
+plot(Z(:,3),Z(:,4),'*r')
+plot(Z(:,4),Z(:,3),'*r')
+plot(N(:,3),N(:,4),'*g')
+plot(N(:,4),N(:,3),'*g')
+plot(M(:,3),M(:,4),'*g')
+plot(M(:,4),M(:,3),'*g')
+xlabel('$x(0)_{1} = x(0)_{2}$','interpreter','latex');
+ylabel('$x(0)_{3} = x(0)_{4}$','interpreter','latex');
 
 
 

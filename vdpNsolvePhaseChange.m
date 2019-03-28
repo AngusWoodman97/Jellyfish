@@ -4,7 +4,7 @@ clf;
 
 if nargin == 0   % if the number of inputs equals 0
     n = 4;
-    t = [0 10000];
+    t = [0 200];
 end
 
 tic
@@ -15,13 +15,13 @@ tic
 % b1 = 2;
 %initialCond = (b1-a1).*rand(2*n,1) + a1; 
 
-initialCond = [0;-2.25;0;-1.25;0;1.75;0;1.75];
+initialCond = [-2.25;0;-1.75;0;1.75;0;2.25;0];
 
 
 %% ODE solver
 
 options = odeset('RelTol',10^-8,'AbsTol',10^-11,'Events',@myEventsFun);
-[t,y,te,ye,ie] = ode23(@vdpN,t,initialCond, options);
+[t,y,te,ye,ie] = ode23(@vdpN2,t,initialCond, options);
 
 %% Checking order of ie & te has the first oscillator first (NOTE: is it always the first oscillator or does it just make sure they are in order?
 
@@ -37,10 +37,11 @@ for i = 1:length(ie)-4
     end
 end
 if mod(length(ie),4) ~= 0
-    ie = ie(mod(length(ie),4)+1:end);
-    te = te(mod(length(te),4)+1:end);
+     ie = ie(1:end-mod(length(ie),4));
+     te = te(1:end-mod(length(te),4));
 end
 te = reshape(te,4,size(te,1)/4);
+ie = reshape(ie,4,size(ie,1)/4);
 
 %% checking the difference in the time periods of the oscilators
 
@@ -61,10 +62,24 @@ tp1_list=te(1,2:end)-te(1,1:end-1);
 tp2_list=te(2,2:end)-te(1,2:end);
 tp3_list=te(3,2:end)-te(1,2:end);
 tp4_list=te(4,2:end)-te(1,2:end);
+tpfull_list = [tp1_list;tp2_list;tp3_list;tp4_list];
 
 phd2_list=tp2_list./tp1_list.*360;
 phd3_list=tp3_list./tp1_list.*360;
 phd4_list=tp4_list./tp1_list.*360;
+
+% MAKES 360 -> 0
+% for i = 1:length(phd2_list)
+%     if round(phd2_list(i),4)>=360
+%         phd2_list(i) = phd2_list(i)-360;
+%     end
+%     if round(phd3_list(i),4)>=360
+%         phd3_list(i) = phd3_list(i)-360;
+%     end
+%     if round(phd4_list(i),4)>=360
+%         phd4_list(i) = phd4_list(i)-360;
+%     end  
+% end
 
 ph_list_full = [phd2_list; phd3_list; phd4_list];
 

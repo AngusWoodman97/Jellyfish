@@ -2,8 +2,8 @@ function [ph_list_full] = perturb_simple(n, t)
 
 clf;
 
-itera = 10000;
-itera2 = 10000;
+itera = 50;
+itera2 = 50;
 
 if nargin == 0   % if the number of inputs equals 0
     n = 4;
@@ -18,7 +18,7 @@ tic
 % b1 = 2;
 %initialCond = (b1-a1).*rand(2*n,1) + a1; 
 
-initialCond = [0;-2.25;0;-1.25;0;1.75;0;1.75];
+initialCond = [0;-2.25;0;-0.25;0;-0.25;0;0.25];
 
 %% ODE solver
 
@@ -73,12 +73,24 @@ ph_list_full = [phd2_list; phd3_list; phd4_list];
 toc
 tic
 
+for j = 1:2:2*n
+    hold on
+    figure(2)
+    plot(t,y(:,j),'-o')
+    title('Solution of van der Pol Equation (e = 5) with ODE23');
+    xlabel('Time t');
+    ylabel('Solution x');
+    hold off
+end
+
+
 %% Perturb
 J = y;
 T = t;
 t = [0 itera2];
 
-initialCond = J(end,:) + [rand/1000,rand/1000,rand/1000,rand/1000,rand/1000,rand/1000,rand/1000,rand/1000];
+%initialCond = J(end,:) + [rand/1000,rand/1000,rand/1000,rand/1000,rand/1000,rand/1000,rand/1000,rand/1000];
+initialCond = J(end,:) + [rand*5,rand*5,rand*5,rand*5,rand*5,rand*5,rand*5,rand*5];
 
 options = odeset('RelTol',10^-8,'AbsTol',10^-11,'Events',@myEventsFun);
 [t,y,te,ye,ie] = ode23(@vdpN,t,initialCond, options);
@@ -101,7 +113,7 @@ if mod(length(ie),4) ~= 0
     te = te(mod(length(te),4)+1:end);
 end
 te = reshape(te,4,size(te,1)/4);
-
+ie = reshape(ie,4,size(ie,1)/4);
 %% checking the difference in the time periods of the oscilators
 
 tp1 = te(1,end)-te(1,end-1);
@@ -132,6 +144,18 @@ hold on
 plot(phd22_list,'b')
 plot(phd33_list,'g')
 plot(phd44_list,'r')
+hold off
+
+for j = 1:2:2*n
+    hold on
+    figure(3)
+    plot(t,y(:,j),'-o')
+    title('Solution of van der Pol Equation (e = 5) with ODE23');
+    xlabel('Time t');
+    ylabel('Solution x');
+end
+
+
 
 %% Rounding phases to the nearest 1 degree
 

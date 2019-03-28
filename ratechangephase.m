@@ -8,3 +8,4 @@ for i = 1:length(x)-1
     y2(i)=x(2,i+1)-x(2,i);
     y3(i)=x(3,i+1)-x(3,i);
 end
+y=[y1;y2;y3];

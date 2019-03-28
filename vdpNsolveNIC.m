@@ -30,15 +30,7 @@ for j = -2.25:0.5:2.25
                 for i=1:size(initialCond2,1)
                     initialCondCheck(i) = sum(ismember(initialCondMatrix,initialCond2(i,:),'rows'));
                 end
-                
-                
-                
-                
-                
-                
-                
-                
-                
+                if sum(initialCondCheck)>0
                 initialCondRepeatMatrix = [initialCondRepeatMatrix; initialCond'];
                 else
                     initialCondMatrix = [initialCondMatrix; initialCond'];
